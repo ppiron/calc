@@ -1,0 +1,72 @@
+#calc {
+  max-width: 300px;
+  height: 350px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-template-rows: repeat(5, 1fr);
+  grid-column-gap: 5px;
+  grid-row-gap: 5px;
+  grid-template-areas: 
+  "display display display display display"
+  "seven eight nine clear clear"
+  "four five six multiply divide"
+  "one two three add subtract"
+  "zero decimal . equals equals"; 
+}
+
+.digit, .decimal, .equals {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: cornflowerblue;
+}
+
+.display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: blanchedalmond;
+  border: 1px solid cornflowerblue;
+  border-radius: 5px;
+}
+
+#display {
+  grid-area: display;
+}
+#zero {
+  grid-area: zero;
+}
+#one {
+  grid-area: one;
+}
+#two {
+  grid-area: two;
+}
+#three {
+  grid-area: three;
+}
+#four {
+  grid-area: four;
+}
+#five {
+  grid-area: five;
+}
+#six {
+  grid-area: six;
+}
+#seven {
+  grid-area: seven;
+}
+#eight {
+  grid-area: eight;
+}
+#nine {
+  grid-area: nine;
+}
+#decimal {
+  grid-area: decimal;
+}
+#equals {
+  grid-area: equals;
+}
