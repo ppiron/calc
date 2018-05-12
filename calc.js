@@ -73,6 +73,8 @@ const calc = expr => {
   }
 }
 
-console.log(calc(expr));
+export default calc;
+
+//console.log(calc(expr));
 
 //console.log(operations(parseInt('1', 10), parseInt('2', 10))['/']());

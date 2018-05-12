@@ -20,6 +20,7 @@
   justify-content: center;
   align-items: center;
   background-color: cornflowerblue;
+  cursor: pointer;
 }
 
 .display {
@@ -69,4 +70,19 @@
 }
 #equals {
   grid-area: equals;
+}
+#add {
+  grid-area: add;
+}
+#subtract {
+  grid-area: subtract;
+}
+#multiply {
+  grid-area: multiply;
+}
+#divide {
+  grid-area: divide;
+}
+#clear {
+  grid-area: clear;
 }

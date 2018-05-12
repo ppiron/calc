@@ -834,6 +834,8 @@ module.exports = containsNode;
 "use strict";
 
 
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _react = __webpack_require__(5);
@@ -842,6 +844,14 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactDom = __webpack_require__(16);
 
+var _digit = __webpack_require__(25);
+
+var _digit2 = _interopRequireDefault(_digit);
+
+var _calc = __webpack_require__(26);
+
+var _calc2 = _interopRequireDefault(_calc);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -849,6 +859,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var digitMap = {
+  'zero': '0',
+  'one': '1',
+  'two': '2',
+  'three': '3',
+  'four': '4',
+  'five': '5',
+  'six': '6',
+  'seven': '7',
+  'eight': '8',
+  'nine': '9',
+  'decimal': '.',
+  'add': ' + ',
+  'subtract': ' - ',
+  'multiply': ' * ',
+  'divide': ' / '
+};
 
 var App = function (_Component) {
   _inherits(App, _Component);
@@ -859,23 +887,71 @@ var App = function (_Component) {
     var _this = _possibleConstructorReturn(this, (App.__proto__ || Object.getPrototypeOf(App)).call(this));
 
     _this.state = {
-      text: _this.defaultText
+      initial: true,
+      text: '0.',
+      ans: []
     };
 
-    _this.handleChange = _this.handleChange.bind(_this);
+    _this.handleClick = _this.handleClick.bind(_this);
+    _this.handleEqual = _this.handleEqual.bind(_this);
+    _this.handleClear = _this.handleClear.bind(_this);
     return _this;
   }
 
   _createClass(App, [{
-    key: 'handleChange',
-    value: function handleChange(event) {
-      this.setState({
-        text: event.target.value
+    key: 'handleClick',
+    value: function handleClick(event) {
+      var id = event.target.id;
+      //const symb = (this.props.digits[id]).trim()
+
+      this.setState(function (state, props) {
+        return {
+          text: state.initial ? props.digits[id] : state.text + props.digits[id],
+          initial: false
+        };
+      });
+    }
+  }, {
+    key: 'handleEqual',
+    value: function handleEqual(event) {
+      var result = (0, _calc2.default)(this.state.text.split(' '));
+      this.setState(function (state, props) {
+        return {
+          text: result,
+          initial: true,
+          ans: [result]
+        };
+      });
+    }
+  }, {
+    key: 'handleClear',
+    value: function handleClear(event) {
+      var id = event.target.id;
+
+      this.setState(function (state, props) {
+        return {
+          text: '0.',
+          initial: true
+        };
       });
     }
   }, {
     key: 'render',
     value: function render() {
+      var _this2 = this;
+
+      var digits = Object.entries(this.props.digits).map(function (_ref) {
+        var _ref2 = _slicedToArray(_ref, 2),
+            k = _ref2[0],
+            v = _ref2[1];
+
+        return _react2.default.createElement(
+          _digit2.default,
+          { key: k, id: k, click: _this2.handleClick },
+          v
+        );
+      });
+
       return _react2.default.createElement(
         'div',
         null,
@@ -890,67 +966,18 @@ var App = function (_Component) {
           _react2.default.createElement(
             'div',
             { id: 'display', className: 'display' },
-            '0.'
+            this.state.text
           ),
+          digits,
           _react2.default.createElement(
-            'div',
-            { id: 'zero', className: 'digit' },
-            '0'
-          ),
-          _react2.default.createElement(
-            'div',
-            { id: 'one', className: 'digit' },
-            '1'
-          ),
-          _react2.default.createElement(
-            'div',
-            { id: 'two', className: 'digit' },
-            '2'
-          ),
-          _react2.default.createElement(
-            'div',
-            { id: 'three', className: 'digit' },
-            '3'
-          ),
-          _react2.default.createElement(
-            'div',
-            { id: 'four', className: 'digit' },
-            '4'
-          ),
-          _react2.default.createElement(
-            'div',
-            { id: 'five', className: 'digit' },
-            '5'
-          ),
-          _react2.default.createElement(
-            'div',
-            { id: 'six', className: 'digit' },
-            '6'
-          ),
-          _react2.default.createElement(
-            'div',
-            { id: 'seven', className: 'digit' },
-            '7'
-          ),
-          _react2.default.createElement(
-            'div',
-            { id: 'eight', className: 'digit' },
-            '8'
-          ),
-          _react2.default.createElement(
-            'div',
-            { id: 'nine', className: 'digit' },
-            '9'
-          ),
-          _react2.default.createElement(
-            'div',
-            { id: 'decimal', className: 'decimal' },
-            '.'
-          ),
-          _react2.default.createElement(
-            'div',
-            { id: 'equals', className: 'equals' },
+            _digit2.default,
+            { id: 'equals', click: this.handleEqual },
             '='
+          ),
+          _react2.default.createElement(
+            _digit2.default,
+            { id: 'clear', click: this.handleClear },
+            'Clear'
           )
         )
       );
@@ -960,7 +987,7 @@ var App = function (_Component) {
   return App;
 }(_react.Component);
 
-(0, _reactDom.render)(_react2.default.createElement(App, null), document.getElementById('root'));
+(0, _reactDom.render)(_react2.default.createElement(App, { digits: digitMap }), document.getElementById('root'));
 
 /***/ }),
 /* 13 */
@@ -7954,6 +7981,129 @@ function camelize(string) {
 }
 
 module.exports = camelize;
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = Digit;
+
+var _react = __webpack_require__(5);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function Digit(props) {
+  return _react2.default.createElement(
+    'div',
+    { id: props.id, className: 'digit', onClick: props.click },
+    props.children
+  );
+}
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+var symbols = ['+', '-', '*', '/', 'blank'];
+
+var compare = function compare(s1, s2) {
+  if (s1 === '*' || s1 === '/') {
+    if (s2 === '+' || s2 === '-') {
+      return 'GT';
+    } else {
+      return 'EQ';
+    }
+  }
+  if (s1 === '+' || s1 === '-') {
+    if (s2 === '*' || s2 === '/') {
+      return 'LT';
+    } else {
+      return 'EQ';
+    }
+  }
+  if (s2 === 'blank') {
+    return 'GT';
+  }
+};
+
+var expr = ['5.2', '/', '5.3', '-', '4'];
+
+var operations = function operations(op1, op2) {
+  return {
+    '+': function _() {
+      return op1 + op2;
+    },
+    '-': function _() {
+      return op1 - op2;
+    },
+    '*': function _() {
+      return op1 * op2;
+    },
+    '/': function _() {
+      return op1 / op2;
+    }
+  };
+};
+
+var calc = function calc(expr) {
+  var acc = [];
+  var ops = ['blank'];
+  var ndec = 0;
+  var ndec_max = 9;
+  for (var i = 0; i < expr.length; i++) {
+    if (!symbols.includes(expr[i])) {
+      if (expr[i].indexOf('.') < 0) {
+        acc.unshift(parseFloat(expr[i]));
+      } else {
+        acc.unshift(parseFloat(expr[i]));
+        ndec = ndec + expr[i].length - expr[i].indexOf('.') - 1 > ndec_max ? ndec_max : ndec + expr[i].length - expr[i].indexOf('.') - 1;
+      }
+      if (compare(ops[0], expr[i + 1]) !== 'LT' && ops.length > 1 || !expr[i + 1]) {
+        //console.log(acc, ndec)
+        var op1 = acc[1];
+        var op2 = acc[0];
+        acc = [operations(op1, op2)[ops[0]]()].concat(_toConsumableArray(acc.slice(2)));
+        ops = ops.slice(1);
+      }
+    } else {
+      ops.unshift(expr[i]);
+      if (expr[i] === '/') {
+        ndec = ndec_max;
+      }
+    }
+  }
+  //console.log(acc[0].toFixed(ndec).slice(acc[0].toFixed(ndec).indexOf('.')))
+  if (acc[0].toFixed(ndec).slice(acc[0].toFixed(ndec).indexOf('.') + 1).split('').find(function (el) {
+    return el !== '0';
+  })) {
+    return acc[0].toFixed(ndec);
+  } else {
+    return acc[0].toFixed(0) + '.';
+  }
+};
+
+exports.default = calc;
+
+//console.log(calc(expr));
+
+//console.log(operations(parseInt('1', 10), parseInt('2', 10))['/']());
 
 /***/ })
 /******/ ]);
