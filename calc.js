@@ -22,7 +22,22 @@ const compare = (s1, s2) => {
   }
 }
 
-const expr = ['5.2', '/', '5.3', '-', '4'];
+const expr = [ "29", "+", "5", "/", "2"];
+
+const findFirstNonZero = str => {
+  const ix = str.length - 1;
+  if (str[ix] !== '0') {
+    return ix;
+  }
+  return findFirstNonZero(str.slice(0, ix));
+};
+
+const findDecimals = str => {
+  if (str.indexOf('.') < 0) {
+    return 0;
+  }
+  return findFirstNonZero(str) - str.indexOf('.');
+};
 
 const operations = (op1, op2) => {
   return {
@@ -38,6 +53,7 @@ const calc = expr => {
   let ops = ['blank'];
   let ndec = 0;
   const ndec_max = 9;
+  
   for (let i = 0; i < expr.length; i++) {
     if (!symbols.includes(expr[i])) {
       if (expr[i].indexOf('.') < 0) {
@@ -49,7 +65,7 @@ const calc = expr => {
       }
       if ((compare(ops[0], expr[i + 1]) !== 'LT' && ops.length > 1) ||
             !expr[i + 1]) {
-          //console.log(acc, ndec)
+          
           const op1 = acc[1];
           const op2 = acc[0];
           acc = [operations(op1, op2)[ops[0]](), ...acc.slice(2)];
@@ -61,20 +77,19 @@ const calc = expr => {
         ndec = ndec_max;
       }
     }
+    //console.log(acc, ops, ndec);
   }
-  //console.log(acc[0].toFixed(ndec).slice(acc[0].toFixed(ndec).indexOf('.')))
-  if (acc[0].toFixed(ndec).slice(acc[0].toFixed(ndec).indexOf('.') + 1).split('').find((el) => {
-    return el !== '0';
-  })) {
-    return acc[0].toFixed(ndec)
-  } else 
-  {
-    return acc[0].toFixed(0) + '.'
+
+  if (acc.length > 1) {
+    const op1 = acc[1];
+    const op2 = acc[0];
+    acc = [operations(op1, op2)[ops[0]]()];
+    ops = ops.slice(1);
   }
+
+  return acc[0].toFixed(findDecimals(acc[0].toFixed(ndec)));
 }
 
 export default calc;
 
 //console.log(calc(expr));
-
-//console.log(operations(parseInt('1', 10), parseInt('2', 10))['/']());

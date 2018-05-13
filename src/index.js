@@ -21,13 +21,18 @@ const digitMap = {
   'divide':   ' / ', 
 }
 
+const checkDoubleDot = str => {
+  const l = str.length - 1;
+  return str[l] === '.' && str[l - 1] === '.';
+}
+
 class App extends Component {
   constructor() {
     super();
     this.state = {
       initial: true,
+      cont: false,
       text: '0.',
-      ans: [],
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -37,25 +42,61 @@ class App extends Component {
 
   handleClick(event) {
     const {id} = event.target;
-    //const symb = (this.props.digits[id]).trim()
+    let text;
+    let cont;
+    let initial;
+    
     this.setState((state, props) => {
+      if (state.initial) {
+        text = props.digits[id];
+        initial = false;
+        cont = state.cont;
+      } else {
+        if (state.cont) {
+          if (['+', '-', '*', '/'].includes((props.digits[id]).trim())) {
+            text = state.text + props.digits[id];
+            initial = state.initial;
+            cont = false;
+          } else {
+            text = props.digits[id];
+            initial = state.initial;
+            cont = false;
+          }
+        } else {
+          text = state.text + props.digits[id];
+          initial = state.initial;
+          cont = state.cont;
+        }
+      }
+
+      if (checkDoubleDot(text)) {
+        return (
+          {
+            initial: state.initial,
+            text: state.text,
+            cont: state.cont,
+          }
+        )  
+      }
+
       return (
         {
-          text: state.initial ? props.digits[id] : state.text + props.digits[id],
-          initial: false,
+          initial: initial,
+          text: text,
+          cont: cont,
         }
       )
     }) 
   }
 
   handleEqual(event) {
+    console.log(this.state.text.split(' '));
     const result = calc(this.state.text.split(' '));
     this.setState((state, props) => {
       return (
         {
+          cont: true,
           text: result,
-          initial: true,
-          ans: [result],
         }
       )
     }) 
@@ -68,6 +109,7 @@ class App extends Component {
         {
           text: '0.',
           initial: true,
+          cont: false,
         }
       )
     }) 

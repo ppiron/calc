@@ -363,6 +363,20 @@ module.exports = emptyFunction;
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+/* WEBPACK VAR INJECTION */(function(process) {
+
+if (process.env.NODE_ENV === 'production') {
+  module.exports = __webpack_require__(13);
+} else {
+  module.exports = __webpack_require__(14);
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 /*
 object-assign
 (c) Sindre Sorhus
@@ -455,7 +469,7 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 };
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -476,20 +490,6 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 module.exports = emptyObject;
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-/* WEBPACK VAR INJECTION */(function(process) {
-
-if (process.env.NODE_ENV === 'production') {
-  module.exports = __webpack_require__(13);
-} else {
-  module.exports = __webpack_require__(14);
-}
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
@@ -838,7 +838,7 @@ var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = [
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _react = __webpack_require__(5);
+var _react = __webpack_require__(3);
 
 var _react2 = _interopRequireDefault(_react);
 
@@ -878,6 +878,11 @@ var digitMap = {
   'divide': ' / '
 };
 
+var checkDoubleDot = function checkDoubleDot(str) {
+  var l = str.length - 1;
+  return str[l] === '.' && str[l - 1] === '.';
+};
+
 var App = function (_Component) {
   _inherits(App, _Component);
 
@@ -888,8 +893,8 @@ var App = function (_Component) {
 
     _this.state = {
       initial: true,
-      text: '0.',
-      ans: []
+      cont: false,
+      text: '0.'
     };
 
     _this.handleClick = _this.handleClick.bind(_this);
@@ -902,24 +907,58 @@ var App = function (_Component) {
     key: 'handleClick',
     value: function handleClick(event) {
       var id = event.target.id;
-      //const symb = (this.props.digits[id]).trim()
+
+      var text = void 0;
+      var cont = void 0;
+      var initial = void 0;
 
       this.setState(function (state, props) {
+        if (state.initial) {
+          text = props.digits[id];
+          initial = false;
+          cont = state.cont;
+        } else {
+          if (state.cont) {
+            if (['+', '-', '*', '/'].includes(props.digits[id].trim())) {
+              text = state.text + props.digits[id];
+              initial = state.initial;
+              cont = false;
+            } else {
+              text = props.digits[id];
+              initial = state.initial;
+              cont = false;
+            }
+          } else {
+            text = state.text + props.digits[id];
+            initial = state.initial;
+            cont = state.cont;
+          }
+        }
+
+        if (checkDoubleDot(text)) {
+          return {
+            initial: state.initial,
+            text: state.text,
+            cont: state.cont
+          };
+        }
+
         return {
-          text: state.initial ? props.digits[id] : state.text + props.digits[id],
-          initial: false
+          initial: initial,
+          text: text,
+          cont: cont
         };
       });
     }
   }, {
     key: 'handleEqual',
     value: function handleEqual(event) {
+      console.log(this.state.text.split(' '));
       var result = (0, _calc2.default)(this.state.text.split(' '));
       this.setState(function (state, props) {
         return {
-          text: result,
-          initial: true,
-          ans: [result]
+          cont: true,
+          text: result
         };
       });
     }
@@ -931,7 +970,8 @@ var App = function (_Component) {
       this.setState(function (state, props) {
         return {
           text: '0.',
-          initial: true
+          initial: true,
+          cont: false
         };
       });
     }
@@ -1007,9 +1047,9 @@ var App = function (_Component) {
 
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
-var m = __webpack_require__(3),
+var m = __webpack_require__(4),
     n = __webpack_require__(1),
-    p = __webpack_require__(4),
+    p = __webpack_require__(5),
     q = __webpack_require__(2),
     r = "function" === typeof Symbol && Symbol["for"],
     t = r ? Symbol["for"]("react.element") : 60103,
@@ -1146,9 +1186,9 @@ if (process.env.NODE_ENV !== "production") {
   (function () {
     'use strict';
 
-    var _assign = __webpack_require__(3);
+    var _assign = __webpack_require__(4);
     var invariant = __webpack_require__(1);
-    var emptyObject = __webpack_require__(4);
+    var emptyObject = __webpack_require__(5);
     var warning = __webpack_require__(6);
     var emptyFunction = __webpack_require__(2);
     var checkPropTypes = __webpack_require__(7);
@@ -2623,14 +2663,14 @@ if (process.env.NODE_ENV === 'production') {
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 var ba = __webpack_require__(1),
-    ea = __webpack_require__(5),
+    ea = __webpack_require__(3),
     m = __webpack_require__(8),
-    A = __webpack_require__(3),
+    A = __webpack_require__(4),
     C = __webpack_require__(2),
     fa = __webpack_require__(9),
     ha = __webpack_require__(10),
     ja = __webpack_require__(11),
-    ka = __webpack_require__(4);
+    ka = __webpack_require__(5);
 function D(a) {
   for (var b = arguments.length - 1, c = "http://reactjs.org/docs/error-decoder.html?invariant\x3d" + a, d = 0; d < b; d++) {
     c += "\x26args[]\x3d" + encodeURIComponent(arguments[d + 1]);
@@ -4908,7 +4948,7 @@ module.exports = isNode;
  *
  * This source code is licensed under the MIT license found in the
  * LICENSE file in the root directory of this source tree.
- */var _typeof=typeof Symbol==="function"&&typeof Symbol.iterator==="symbol"?function(obj){return typeof obj;}:function(obj){return obj&&typeof Symbol==="function"&&obj.constructor===Symbol&&obj!==Symbol.prototype?"symbol":typeof obj;};if(process.env.NODE_ENV!=="production"){(function(){'use strict';var invariant=__webpack_require__(1);var React=__webpack_require__(5);var warning=__webpack_require__(6);var ExecutionEnvironment=__webpack_require__(8);var _assign=__webpack_require__(3);var emptyFunction=__webpack_require__(2);var checkPropTypes=__webpack_require__(7);var getActiveElement=__webpack_require__(9);var shallowEqual=__webpack_require__(10);var containsNode=__webpack_require__(11);var emptyObject=__webpack_require__(4);var hyphenateStyleName=__webpack_require__(21);var camelizeStyleName=__webpack_require__(23);// Relying on the `invariant()` implementation lets us
+ */var _typeof=typeof Symbol==="function"&&typeof Symbol.iterator==="symbol"?function(obj){return typeof obj;}:function(obj){return obj&&typeof Symbol==="function"&&obj.constructor===Symbol&&obj!==Symbol.prototype?"symbol":typeof obj;};if(process.env.NODE_ENV!=="production"){(function(){'use strict';var invariant=__webpack_require__(1);var React=__webpack_require__(3);var warning=__webpack_require__(6);var ExecutionEnvironment=__webpack_require__(8);var _assign=__webpack_require__(4);var emptyFunction=__webpack_require__(2);var checkPropTypes=__webpack_require__(7);var getActiveElement=__webpack_require__(9);var shallowEqual=__webpack_require__(10);var containsNode=__webpack_require__(11);var emptyObject=__webpack_require__(5);var hyphenateStyleName=__webpack_require__(21);var camelizeStyleName=__webpack_require__(23);// Relying on the `invariant()` implementation lets us
 // have preserve the format and params in the www builds.
 !React?invariant(false,'ReactDOM was loaded before React. Make sure you load the React package before loading ReactDOM.'):void 0;var invokeGuardedCallback=function invokeGuardedCallback(name,func,context,a,b,c,d,e,f){this._hasCaughtError=false;this._caughtError=null;var funcArgs=Array.prototype.slice.call(arguments,3);try{func.apply(context,funcArgs);}catch(error){this._caughtError=error;this._hasCaughtError=true;}};{// In DEV mode, we swap out invokeGuardedCallback for a special version
 // that plays more nicely with the browser's DevTools. The idea is to preserve
@@ -7994,7 +8034,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = Digit;
 
-var _react = __webpack_require__(5);
+var _react = __webpack_require__(3);
 
 var _react2 = _interopRequireDefault(_react);
 
@@ -8043,7 +8083,22 @@ var compare = function compare(s1, s2) {
   }
 };
 
-var expr = ['5.2', '/', '5.3', '-', '4'];
+var expr = ["29", "+", "5", "/", "2"];
+
+var findFirstNonZero = function findFirstNonZero(str) {
+  var ix = str.length - 1;
+  if (str[ix] !== '0') {
+    return ix;
+  }
+  return findFirstNonZero(str.slice(0, ix));
+};
+
+var findDecimals = function findDecimals(str) {
+  if (str.indexOf('.') < 0) {
+    return 0;
+  }
+  return findFirstNonZero(str) - str.indexOf('.');
+};
 
 var operations = function operations(op1, op2) {
   return {
@@ -8067,6 +8122,7 @@ var calc = function calc(expr) {
   var ops = ['blank'];
   var ndec = 0;
   var ndec_max = 9;
+
   for (var i = 0; i < expr.length; i++) {
     if (!symbols.includes(expr[i])) {
       if (expr[i].indexOf('.') < 0) {
@@ -8076,7 +8132,7 @@ var calc = function calc(expr) {
         ndec = ndec + expr[i].length - expr[i].indexOf('.') - 1 > ndec_max ? ndec_max : ndec + expr[i].length - expr[i].indexOf('.') - 1;
       }
       if (compare(ops[0], expr[i + 1]) !== 'LT' && ops.length > 1 || !expr[i + 1]) {
-        //console.log(acc, ndec)
+
         var op1 = acc[1];
         var op2 = acc[0];
         acc = [operations(op1, op2)[ops[0]]()].concat(_toConsumableArray(acc.slice(2)));
@@ -8088,22 +8144,22 @@ var calc = function calc(expr) {
         ndec = ndec_max;
       }
     }
+    //console.log(acc, ops, ndec);
   }
-  //console.log(acc[0].toFixed(ndec).slice(acc[0].toFixed(ndec).indexOf('.')))
-  if (acc[0].toFixed(ndec).slice(acc[0].toFixed(ndec).indexOf('.') + 1).split('').find(function (el) {
-    return el !== '0';
-  })) {
-    return acc[0].toFixed(ndec);
-  } else {
-    return acc[0].toFixed(0) + '.';
+
+  if (acc.length > 1) {
+    var _op = acc[1];
+    var _op2 = acc[0];
+    acc = [operations(_op, _op2)[ops[0]]()];
+    ops = ops.slice(1);
   }
+
+  return acc[0].toFixed(findDecimals(acc[0].toFixed(ndec)));
 };
 
 exports.default = calc;
 
 //console.log(calc(expr));
-
-//console.log(operations(parseInt('1', 10), parseInt('2', 10))['/']());
 
 /***/ })
 /******/ ]);
