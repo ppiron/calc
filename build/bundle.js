@@ -911,7 +911,7 @@ var App = function (_Component) {
     _this.state = {
       initial: true,
       cont: false,
-      text: '0.'
+      text: '0'
     };
 
     _this.handleClick = _this.handleClick.bind(_this);
@@ -995,7 +995,7 @@ var App = function (_Component) {
 
       this.setState(function (state, props) {
         return {
-          text: '0.',
+          text: '0',
           initial: true,
           cont: false
         };
@@ -8109,7 +8109,7 @@ var compare = function compare(s1, s2) {
   }
 };
 
-var expr = ["29", "+", "5", "/", "2"];
+var expr = ["2", "+", "3", "*", "1", "-", "4", "/", "2"];
 
 var findFirstNonZero = function findFirstNonZero(str) {
   var ix = str.length - 1;
@@ -8178,10 +8178,10 @@ var calc = function calc(expr) {
     //console.log(acc, ops, ndec);
   }
 
-  if (acc.length > 1) {
+  while (acc.length > 1) {
     var _op = acc[1];
     var _op2 = acc[0];
-    acc = [operations(_op, _op2)[ops[0]]()];
+    acc = [operations(_op, _op2)[ops[0]]()].concat(_toConsumableArray(acc.slice(2)));
     ops = ops.slice(1);
   }
 

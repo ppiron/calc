@@ -22,7 +22,7 @@ const compare = (s1, s2) => {
   }
 }
 
-const expr = [ "29", "+", "5", "/", "2"];
+const expr = [ "2", "+", "3", "*", "1", "-", "4", "/", "2" ];
 
 const findFirstNonZero = str => {
   const ix = str.length - 1;
@@ -85,10 +85,10 @@ const calc = expr => {
     //console.log(acc, ops, ndec);
   }
 
-  if (acc.length > 1) {
+  while (acc.length > 1) {
     const op1 = acc[1];
     const op2 = acc[0];
-    acc = [operations(op1, op2)[ops[0]]()];
+    acc = [operations(op1, op2)[ops[0]](), ...acc.slice(2)];
     ops = ops.slice(1);
   }
 

@@ -47,7 +47,7 @@ class App extends Component {
     this.state = {
       initial: true,
       cont: false,
-      text: '0.',
+      text: '0',
     };
 
     this.handleClick = this.handleClick.bind(this);
@@ -133,7 +133,7 @@ class App extends Component {
     this.setState((state, props) => {
       return (
         {
-          text: '0.',
+          text: '0',
           initial: true,
           cont: false,
         }
