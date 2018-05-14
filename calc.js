@@ -49,6 +49,11 @@ const operations = (op1, op2) => {
 }
 
 const calc = expr => {
+
+  if (expr.length === 1) {
+    return expr[0];
+  }
+
   let acc = [];
   let ops = ['blank'];
   let ndec = 0;

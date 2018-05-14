@@ -26,6 +26,21 @@ const checkDoubleDot = str => {
   return str[l] === '.' && str[l - 1] === '.';
 }
 
+const checkDoubleZero = str => {
+  return str[0] === '0' && str[1] === '0';
+}
+
+const checkDoubleOperator = str => {
+  const st = str.split(' ').filter(itm => itm !== '').join('')
+  const l1 = str.length - 1;
+  const l = st.length - 1;
+  const operators = ['+', '-', '*', '/'];
+  if (operators.includes(st[l]) && operators.includes(st[l - 1])) {
+    return str.slice(0, l1 - 5).concat(' ' + st[l] + ' ');
+  }
+  return false
+}
+
 class App extends Component {
   constructor() {
     super();
@@ -69,7 +84,7 @@ class App extends Component {
         }
       }
 
-      if (checkDoubleDot(text)) {
+      if (checkDoubleDot(text) || checkDoubleZero(text)) {
         return (
           {
             initial: state.initial,
@@ -77,6 +92,17 @@ class App extends Component {
             cont: state.cont,
           }
         )  
+      }
+      
+      if (checkDoubleOperator(text)) {
+        console.log('giggi');
+        return (
+          {
+            initial: state.initial,
+            text: checkDoubleOperator(text),
+            cont: state.cont,
+          }
+        )
       }
 
       return (

@@ -883,6 +883,23 @@ var checkDoubleDot = function checkDoubleDot(str) {
   return str[l] === '.' && str[l - 1] === '.';
 };
 
+var checkDoubleZero = function checkDoubleZero(str) {
+  return str[0] === '0' && str[1] === '0';
+};
+
+var checkDoubleOperator = function checkDoubleOperator(str) {
+  var st = str.split(' ').filter(function (itm) {
+    return itm !== '';
+  }).join('');
+  var l1 = str.length - 1;
+  var l = st.length - 1;
+  var operators = ['+', '-', '*', '/'];
+  if (operators.includes(st[l]) && operators.includes(st[l - 1])) {
+    return str.slice(0, l1 - 5).concat(' ' + st[l] + ' ');
+  }
+  return false;
+};
+
 var App = function (_Component) {
   _inherits(App, _Component);
 
@@ -935,10 +952,19 @@ var App = function (_Component) {
           }
         }
 
-        if (checkDoubleDot(text)) {
+        if (checkDoubleDot(text) || checkDoubleZero(text)) {
           return {
             initial: state.initial,
             text: state.text,
+            cont: state.cont
+          };
+        }
+
+        if (checkDoubleOperator(text)) {
+          console.log('giggi');
+          return {
+            initial: state.initial,
+            text: checkDoubleOperator(text),
             cont: state.cont
           };
         }
@@ -8118,6 +8144,11 @@ var operations = function operations(op1, op2) {
 };
 
 var calc = function calc(expr) {
+
+  if (expr.length === 1) {
+    return expr[0];
+  }
+
   var acc = [];
   var ops = ['blank'];
   var ndec = 0;
