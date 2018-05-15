@@ -26,6 +26,16 @@ const checkDoubleDot = str => {
   return str[l] === '.' && str[l - 1] === '.';
 }
 
+const removeMultipleDots = str => {
+  let last = str.split(' ').slice(-1)[0];
+  const head = str.split(' ').slice(0, -1);
+  const first = last.slice(0, last.indexOf('.') + 1);
+  last = last.slice(last.indexOf('.') + 1).replace(/\./g, '');
+  console.log(first, last);
+  last = first.concat(last);
+  return head.concat([last]).join(' ');
+}
+
 const checkDoubleZero = str => {
   return str[0] === '0' && str[1] === '0';
 }
@@ -108,7 +118,7 @@ class App extends Component {
       return (
         {
           initial: initial,
-          text: text,
+          text: removeMultipleDots(text),
           cont: cont,
         }
       )

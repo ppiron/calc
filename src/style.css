@@ -23,6 +23,10 @@
   cursor: pointer;
 }
 
+.digit:hover {
+  background-color: cadetblue;
+}
+
 .display {
   display: flex;
   justify-content: center;

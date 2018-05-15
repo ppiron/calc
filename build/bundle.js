@@ -883,6 +883,16 @@ var checkDoubleDot = function checkDoubleDot(str) {
   return str[l] === '.' && str[l - 1] === '.';
 };
 
+var removeMultipleDots = function removeMultipleDots(str) {
+  var last = str.split(' ').slice(-1)[0];
+  var head = str.split(' ').slice(0, -1);
+  var first = last.slice(0, last.indexOf('.') + 1);
+  last = last.slice(last.indexOf('.') + 1).replace(/\./g, '');
+  console.log(first, last);
+  last = first.concat(last);
+  return head.concat([last]).join(' ');
+};
+
 var checkDoubleZero = function checkDoubleZero(str) {
   return str[0] === '0' && str[1] === '0';
 };
@@ -971,7 +981,7 @@ var App = function (_Component) {
 
         return {
           initial: initial,
-          text: text,
+          text: removeMultipleDots(text),
           cont: cont
         };
       });
